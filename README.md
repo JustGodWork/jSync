@@ -19,6 +19,20 @@ jSync = exports["jSync"]:getSharedObject()
 
 print(jSync.getCurrentHour(), jSync.getCurrentMinute())
 
+--You can also use it like this:
+local currentHour, currentMinute, currentWeather = 0, 0, ""
+CreateThread(function()
+	TriggerEvent("jSync:getCurrentWeather", function(jSyncCurrentWeather)
+		currentWeather = jSyncCurrentWeather
+		print(currentWeather)
+	end)
+	TriggerEvent("jSync:getCurrentTime", function(jSyncCurrentHour, jSyncCurrentMinute)
+		currentHour, currentMinute = jSyncCurrentHour, jSyncCurrentMinute
+		print(currentHour, currentMinute)
+	end)
+	Wait(2000)
+end)
+
 ```
 
 for any question join my discord:  [Discord
