@@ -13,9 +13,18 @@
 --]]
 
 jSync = {}
-
+jSync.currentHour = 0
+jSync.currentMinute = 0
+jSync.currentWeather = ""
 
 --LISTENERS
+RegisterNetEvent("jSync:onPlayerJoined", function(data)
+    print(json.encode(data))
+    jSync.currentHour = data.hour
+    jSync.currentMinute = data.minute
+    jSync.currentWeather = data.weather
+end)
+
 local currentWeather;
 RegisterNetEvent("jSync:setWeather", function(weather)
     if currentWeather ~= weather then
@@ -30,28 +39,26 @@ RegisterNetEvent("jSync:setWeather", function(weather)
     end
 end)
 
-local currentHour;
-local currentMinute;
 RegisterNetEvent("jSync:setClockTime", function(hour, minute)
     if Config.debug then
         print("[Time] Setting time to " .. GetClockHours() .. ":" .. GetClockMinutes())
     end
     NetworkOverrideClockTime(hour, minute, 0)
-    currentHour = hour
-    currentMinute = minute
+    jSync.currentHour = hour
+    jSync.currentMinute = minute
 end)
 
 --FUNCTIONS
 function jSync.getCurrentWeather()
-    return currentWeather
+    return jSync.currentWeather
 end
 
 function jSync.getCurrentHour()
-    return currentHour
+    return jSync.currentHour
 end
 
 function jSync.getCurrentMinute()
-    return currentMinute
+    return jSync.currentMinute
 end
 
 --EXPORTS THINGS
@@ -61,11 +68,11 @@ AddEventHandler("jSync:getSharedObject", function(cb)
 end)
 
 RegisterNetEvent("jSync:getCurrentWeather", function(cb)
-    cb(currentWeather)
+    cb(jSync.currentWeather)
 end)
 
 RegisterNetEvent("jSync:getCurrentTime", function(cb)
-    cb(currentHour, currentMinute)
+    cb(jSync.currentHour, jSync.currentMinute)
 end)
 
 exports('getSharedObject', function()

@@ -23,19 +23,6 @@ function _Time:new()
     self.frozen = false
     self.thread = Thread:new()
 
-    AddEventHandler("onResourceStart", function(resource)
-        if resource == GetCurrentResourceName() then
-            self:sync()
-        end
-    end)
-
-    AddEventHandler("esx:playerLoaded", function(playerSource)
-        if Config.debug then
-            print("[Time] Player " .. GetPlayerName(playerSource) .. " loaded.")
-        end
-        TriggerClientEvent("jSync:setClockTime", playerSource, self.currentHour, self.currentMinute)
-    end)
-
     function self:setCurrentTime(hour, minute)
         if type(hour) ~= "number" or type(minute) ~= "number" then
             return print("^7[^1TIME SYSTEM^7]^3 Invalid time format.^7")

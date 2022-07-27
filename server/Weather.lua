@@ -39,19 +39,6 @@ function _Weather:new()
     self.currentWeather = "EXTRASUNNY"
     self.thread = Thread:new()
 
-    AddEventHandler("onResourceStart", function(resource)
-        if resource == GetCurrentResourceName() then
-            self:syncWeather()
-        end
-    end)
-
-    AddEventHandler("esx:playerLoaded", function(playerSource)
-        if Config.debug then
-            print("[Weather] Player " .. GetPlayerName(playerSource) .. " loaded.")
-        end
-        TriggerClientEvent("jSync:setWeather", playerSource, self:getCurrentWeather())
-    end)
-
     ---Return actual weather synced to all players
     ---@return string
     function self:getCurrentWeather()

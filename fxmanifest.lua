@@ -23,7 +23,8 @@ server_scripts {
     '@es_extended/imports.lua',
     "server/Thread.lua",
     "server/Weather.lua",
-    "server/Time.lua"
+    "server/Time.lua",
+    "server/events.lua"
 }
 
 client_script "client/listener.lua"
