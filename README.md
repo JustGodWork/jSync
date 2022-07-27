@@ -22,6 +22,7 @@ print(jSync.getCurrentHour(), jSync.getCurrentMinute())
 --You can also use it like this:
 local currentHour, currentMinute, currentWeather = 0, 0, ""
 CreateThread(function()
+	Wait(5000)
 	while true do
         TriggerEvent("jSync:getCurrentWeather", function(jSyncCurrentWeather)
             currentWeather = jSyncCurrentWeather
