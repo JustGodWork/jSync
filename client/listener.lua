@@ -60,6 +60,14 @@ AddEventHandler("jSync:getSharedObject", function(cb)
     cb(jSync)
 end)
 
+RegisterNetEvent("jSync:getCurrentWeather", function(cb)
+    cb(currentWeather)
+end)
+
+RegisterNetEvent("jSync:getCurrentTime", function(cb)
+    cb(currentHour, currentMinute)
+end)
+
 exports('getSharedObject', function()
 	return jSync
 end)
