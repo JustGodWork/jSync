@@ -25,9 +25,8 @@ RegisterNetEvent("jSync:onPlayerJoined", function(data)
     jSync.currentWeather = data.weather
 end)
 
-local currentWeather;
 RegisterNetEvent("jSync:setWeather", function(weather)
-    if currentWeather ~= weather then
+    if jSync.currentWeather ~= weather then
         SetWeatherTypeOvertimePersist(weather, 15.0)
         Wait(15000)
         ClearOverrideWeather()
@@ -35,7 +34,7 @@ RegisterNetEvent("jSync:setWeather", function(weather)
         SetWeatherTypePersist(weather)
         SetWeatherTypeNow(weather)
         SetWeatherTypeNowPersist(weather)
-        currentWeather = weather
+        jSync.currentWeather = weather
     end
 end)
 
