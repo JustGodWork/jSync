@@ -3,7 +3,7 @@
 jSync is a server-side weather and time system that works with ESX but can be easily modified
 
 
-# Usage
+# Usage (Client-Side)
 
 ```lua
 --You have two options for exporting jSync in your resources
