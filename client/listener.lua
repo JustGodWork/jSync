@@ -60,6 +60,10 @@ function jSync.getCurrentMinute()
     return jSync.currentMinute
 end
 
+function jSync.getConfig()
+    return Config
+end
+
 --EXPORTS THINGS
 
 AddEventHandler("jSync:getSharedObject", function(cb)
