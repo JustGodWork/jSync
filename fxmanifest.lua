@@ -28,3 +28,5 @@ server_scripts {
 }
 
 client_script "client/listener.lua"
+
+version "1.1.0"
