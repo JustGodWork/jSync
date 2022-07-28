@@ -21,9 +21,21 @@ jSync.currentWeather = ""
 --     return Citizen.InvokeNative(0x4055E40BD2DBEC1D, bool)
 -- end
 
+CreateThread(function()
+	while true do
+		Wait(0)
+		if NetworkIsPlayerActive(PlayerId()) then
+			TriggerServerEvent('jSync:onPlayerJoined')
+			break
+		end
+	end
+end)
+
 --LISTENERS
 RegisterNetEvent("jSync:onPlayerJoined", function(data)
-    print(json.encode(data))
+    if Config.debug then
+        print(json.encode(data))
+    end
     jSync.currentHour = data.hour
     jSync.currentMinute = data.minute
     jSync.currentWeather = data.weather

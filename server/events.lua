@@ -52,7 +52,8 @@ AddEventHandler("onResourceStart", function(resource)
     end
 end)
 
-AddEventHandler("esx:playerLoaded", function(playerSource)
+RegisterNetEvent("jSync:onPlayerJoined", function()
+    local playerSource = source
     if Config.debug then
         print("^7[^1jSync^7]^3 Player ^4" .. GetPlayerName(playerSource) .. "^3 loaded.^7")
     end
