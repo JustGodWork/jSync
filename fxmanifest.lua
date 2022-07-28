@@ -20,11 +20,11 @@ lua54 'yes'
 shared_script "Config.lua"
 
 server_scripts {
-    '@es_extended/imports.lua',
     "server/Thread.lua",
     "server/Weather.lua",
     "server/Time.lua",
-    "server/events.lua"
+    "server/events.lua",
+    "server/commands.lua"
 }
 
 client_script "client/listener.lua"

@@ -154,37 +154,3 @@ Weather:addMultipleWeatherToBlacklist({
 })
 
 Weather:start()
-
-ESX.RegisterCommand("setweather", "superadmin", function(xPlayer, args, showError)
-	if Weather:setCurrentWeather((args.weather):upper()) then
-        if xPlayer then 
-            xPlayer.showNotification("~c~Weather is now ~s~'~b~" .. (args.weather):upper() .. "~s~'~c~.")
-        end
-    else
-        if xPlayer then 
-            xPlayer.showNotification("~c~This weather is ~r~blacklisted~c~.") 
-        else
-            print("^7[^1WEATHER SYSTEM^7]^3 This weather is ^1blacklisted^3.^7")
-        end
-    end
-end, true, {arguments = {
-	{name = 'weather', help = "Weather to set. Types: CLEAR, CLEARING, CLOUDS, EXTRASUNNY, FOGGY, OVERCAST, RAIN, SMOG, THUNDER, XMAS, SNOWLIGHT, BLIZZARD, HALLOWEEN", type = 'string'},
-}, help = "Change current weather"})
-
-ESX.RegisterCommand("freezeweather", "superadmin", function(xPlayer, args, showError)
-    Weather:freezeWeather(nil, function(active)
-        if active then
-            if xPlayer then
-                xPlayer.showNotification("Weather sync thread is now ~r~INACTIVE~s~ and weather has been frozen.^7")
-            else
-                print("^7[^1WEATHER SYSTEM^7]^3 Weather sync thread is now ^1INACTIVE^3 and weather has been frozen.^7")
-            end
-        else
-            if xPlayer then
-                xPlayer.showNotification("Weather sync thread is now ~g~ACTIVE~s~ and weather has been unfrozen.^7") 
-            else
-                print("^7[^1WEATHER SYSTEM^7]^3 Weather sync thread is now ^4ACTIVE^3 and weather has been unfrozen.^7")
-            end
-        end
-    end) 
-end, true, {arguments = {}, help = "Freeze weather to current weather"})

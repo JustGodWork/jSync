@@ -76,33 +76,3 @@ end
 Time = _Time:new()
 
 Time:start()
-
-ESX.RegisterCommand("settime", "admin", function(xPlayer, args, showError)
-    Time:setCurrentTime(args.hour, args.minute)
-    if xPlayer then 
-        xPlayer.showNotification("~c~Time is now ~s~'~b~" .. args.hour .. ":" .. args.minute .. "~s~'~c~.")
-    else
-        print("^7[^1TIME SYSTEM^7]^3 Time is now ^7'^4" .. args.hour .. ":" .. args.minute .. "^7'^3.^7")
-    end
-end, true, {arguments = {
-	{name = 'hour', help = "Hour to set (0, 23)", type = 'number'},
-    {name = 'minute', help = "minute to set (0, 59)", type = 'number'}
-}, help = "Change current time"})
-
-ESX.RegisterCommand("freezetime", "admin", function(xPlayer, args, showError)
-    Time:freezeTime(nil, nil, function(active)
-        if active then
-            if xPlayer then
-                xPlayer.showNotification("Time sync thread is now ~r~INACTIVE~s~ and time has been frozen.")
-            else
-                print("^7[^1TIME SYSTEM^7]^3 Time sync thread is now ^1INACTIVE^3 and time has been frozen.^7")
-            end
-        else
-            if xPlayer then
-                xPlayer.showNotification("Time sync thread is now ~g~ACTIVE~s~ and time has been unfrozen.") 
-            else
-                print("^7[^1TIME SYSTEM^7]^3 Time sync thread is now ^4ACTIVE^3 and time has been unfrozen.^7")
-            end
-        end
-    end) 
-end, true, {arguments = {}, help = "Freeze time to current time"})

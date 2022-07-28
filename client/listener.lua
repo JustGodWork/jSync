@@ -17,6 +17,10 @@ jSync.currentHour = 0
 jSync.currentMinute = 0
 jSync.currentWeather = ""
 
+-- local function PauseClock(bool) -- ---todo PauseClock This native is not working properly.
+--     return Citizen.InvokeNative(0x4055E40BD2DBEC1D, bool)
+-- end
+
 --LISTENERS
 RegisterNetEvent("jSync:onPlayerJoined", function(data)
     print(json.encode(data))
@@ -39,15 +43,25 @@ RegisterNetEvent("jSync:setWeather", function(weather)
 end)
 
 RegisterNetEvent("jSync:setClockTime", function(hour, minute)
+    --PauseClock(true) ---todo PauseClock This native is not working properly.
+    NetworkOverrideClockTime(hour, minute, 0)
+    SetClockTime(hour, minute, 0)
+    jSync.currentHour = hour
+    jSync.currentMinute = minute
     if Config.debug then
         print("[Time] Setting time to " .. GetClockHours() .. ":" .. GetClockMinutes())
     end
-    NetworkOverrideClockTime(hour, minute, 0)
-    jSync.currentHour = hour
-    jSync.currentMinute = minute
 end)
 
 --FUNCTIONS
+
+---@param msg string
+function jSync.showNotification(msg)
+	BeginTextCommandThefeedPost('STRING')
+	AddTextComponentSubstringPlayerName(msg)
+	EndTextCommandThefeedPostTicker(0,1)
+end
+
 function jSync.getCurrentWeather()
     return jSync.currentWeather
 end
@@ -69,6 +83,8 @@ end
 AddEventHandler("jSync:getSharedObject", function(cb)
     cb(jSync)
 end)
+
+RegisterNetEvent("jSync:showNotification", jSync.showNotification)
 
 RegisterNetEvent("jSync:getCurrentWeather", function(cb)
     cb(jSync.currentWeather)
