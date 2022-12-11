@@ -118,6 +118,13 @@ function _Weather:new()
             self:addWeatherToBlacklist(weathers[i])
         end
     end
+    
+    ---Set a persistent weather even if it is blacklisted
+    ---@param weather string
+    function self:setPersistentWeather(weather)
+        self.thread:stop()
+        self.currentWeather = weather
+    end
 
     ---Stop weather sync thread and freeze current weather synced to all players
     ---@param weather string
@@ -154,3 +161,6 @@ Weather:addMultipleWeatherToBlacklist({
 })
 
 Weather:start()
+
+---exemple
+---Weather:setPersistentWeather("xMas")
