@@ -21,6 +21,5 @@ Config.Timers.Weather = 30 -- Time in minutes between each update of the weather
 
 --FOR ESX
 Config.UseESX = false -- Use ESX commands system
-Config.ESXEvent = "esx:getSharedObject" -- ESX event to get the ESX object
 
 --for any question or suggestion join my discord: https://discord.gg/DbuTNv9sqD

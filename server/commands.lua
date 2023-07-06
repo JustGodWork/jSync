@@ -14,9 +14,7 @@
 
 if Config.UseESX then
 
-    TriggerEvent(Config.ESXEvent, function(obj)
-        ESX = obj
-    end)
+    ESX = exports["es_extended"]:getSharedObject()
 
     if ESX then
         --WEATHER SYSTEM
