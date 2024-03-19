@@ -3,7 +3,7 @@
 --Author: JustGod
 --Made with ❤
 -------
---Last Modified: Thursday July 28th 2022 1:58:37 pm
+--Last Modified: Thuesday March 19th 2024 10:22:39 pm
 -------
 --Copyright (c) 2022 JustGodWork, All Rights Reserved.
 --This file is part of JustGodWork project.
@@ -12,145 +12,153 @@
 -------
 --]]
 
-if Config.UseESX then
+commands = {};
 
-    ESX = exports["es_extended"]:getSharedObject()
-
-    if ESX then
-        --WEATHER SYSTEM
-        ESX.RegisterCommand("setweather", "superadmin", function(xPlayer, args, showError)
-            if Weather:setCurrentWeather((args.weather):upper()) then
-                if xPlayer then 
-                    xPlayer.showNotification("~c~Weather is now ~s~'~b~" .. (args.weather):upper() .. "~s~'~c~.")
-                end
-            else
-                if xPlayer then 
-                    xPlayer.showNotification("~c~This weather is ~r~blacklisted~c~.") 
-                else
-                    print("^7[^1WEATHER SYSTEM^7]^3 This weather is ^1blacklisted^3.^7")
-                end
-            end
-        end, true, {arguments = {
-            {name = 'weather', help = "Weather to set. Types: CLEAR, CLEARING, CLOUDS, EXTRASUNNY, FOGGY, OVERCAST, RAIN, SMOG, THUNDER, XMAS, SNOWLIGHT, BLIZZARD, HALLOWEEN", type = 'string'},
-        }, help = "Change current weather"})
-
-        ESX.RegisterCommand("freezeweather", "superadmin", function(xPlayer, args, showError)
-            Weather:freezeWeather(nil, function(active)
-                if active then
-                    if xPlayer then
-                        xPlayer.showNotification("Weather sync thread is now ~r~INACTIVE~s~ and weather has been frozen.^7")
-                    else
-                        print("^7[^1WEATHER SYSTEM^7]^3 Weather sync thread is now ^1INACTIVE^3 and weather has been frozen.^7")
-                    end
-                else
-                    if xPlayer then
-                        xPlayer.showNotification("Weather sync thread is now ~g~ACTIVE~s~ and weather has been unfrozen.^7") 
-                    else
-                        print("^7[^1WEATHER SYSTEM^7]^3 Weather sync thread is now ^4ACTIVE^3 and weather has been unfrozen.^7")
-                    end
-                end
-            end) 
-        end, true, {arguments = {}, help = "Freeze weather to current weather"})
-
-        --TIME
-        ESX.RegisterCommand("settime", "admin", function(xPlayer, args, showError)
-            Time:setCurrentTime(args.hour, args.minute)
-            if xPlayer then 
-                xPlayer.showNotification("~c~Time is now ~s~'~b~" .. args.hour .. ":" .. args.minute .. "~s~'~c~.")
-            else
-                print("^7[^1TIME SYSTEM^7]^3 Time is now ^7'^4" .. args.hour .. ":" .. args.minute .. "^7'^3.^7")
-            end
-        end, true, {arguments = {
-            {name = 'hour', help = "Hour to set (0, 23)", type = 'number'},
-            {name = 'minute', help = "minute to set (0, 59)", type = 'number'}
-        }, help = "Change current time"})
-
-        ESX.RegisterCommand("freezetime", "admin", function(xPlayer, args, showError)
-            Time:freezeTime(nil, nil, function(active)
-                if active then
-                    if xPlayer then
-                        xPlayer.showNotification("Time sync thread is now ~r~INACTIVE~s~ and time has been frozen.")
-                    else
-                        print("^7[^1TIME SYSTEM^7]^3 Time sync thread is now ^1INACTIVE^3 and time has been frozen.^7")
-                    end
-                else
-                    if xPlayer then
-                        xPlayer.showNotification("Time sync thread is now ~g~ACTIVE~s~ and time has been unfrozen.") 
-                    else
-                        print("^7[^1TIME SYSTEM^7]^3 Time sync thread is now ^4ACTIVE^3 and time has been unfrozen.^7")
-                    end
-                end
-            end) 
-        end, true, {arguments = {}, help = "Freeze time to current time"})
-    else
-        print("^7[^1WEATHER SYSTEM^7]^1 ESX was not found, please check your server and config files.^7")
-    end
-
-else
-
-    --WEATHER SYSTEM
-    RegisterCommand("setweather", function(source, args)
-        if not args[1] then return print("^7[^1WEATHER SYSTEM^7]^3 Usage: /setweather <weather>") end
-        if Weather:setCurrentWeather((args[1]):upper()) then
-            if source ~= 0 then 
-                TriggerClientEvent("jSync:showNotification", source, "~c~Weather is now ~s~'~b~" .. (args[1]):upper() .. "~s~'~c~.")
-            end
-        else
-            if source ~= 0 then 
-                TriggerClientEvent("jSync:showNotification", source, "~c~This weather is ~r~blacklisted~c~.") 
-            else
-                print("^7[^1WEATHER SYSTEM^7]^3 This weather is ^1blacklisted^3.^7")
-            end
-        end
-    end)
-
-    RegisterCommand("freezeweather", function(source)
-        Weather:freezeWeather(nil, function(active)
-            if active then
-                if source ~= 0 then
-                    TriggerClientEvent("jSync:showNotification", source, "Weather sync thread is now ~r~INACTIVE~s~ and weather has been frozen.")
-                else
-                    print("^7[^1WEATHER SYSTEM^7]^3 Weather sync thread is now ^1INACTIVE^3 and weather has been frozen.^7")
-                end
-            else
-                if source ~= 0 then
-                    TriggerClientEvent("jSync:showNotification", source, "Weather sync thread is now ~g~ACTIVE~s~ and weather has been unfrozen.") 
-                else
-                    print("^7[^1WEATHER SYSTEM^7]^3 Weather sync thread is now ^4ACTIVE^3 and weather has been unfrozen.^7")
-                end
-            end
-        end) 
-    end)
-
-    --TIME SYSTEM
-    RegisterCommand("settime", function(source, args)
-        if not args[1] or not args[2] then 
-            return print("^7[^1TIME SYSTEM^7]^3 Usage: /settime <hour, minute>") 
-        end
-        Time:setCurrentTime(tonumber(args[1]), tonumber(args[2]))
-        if source ~= 0 then 
-            TriggerClientEvent("jSync:showNotification", source, "~c~Time is now ~s~'~b~" .. args[1] .. ":" .. args[2] .. "~s~'~c~.")
-        else
-            print("^7[^1TIME SYSTEM^7]^3 Time is now ^7'^4" .. args[1] .. ":" .. args[2] .. "^7'^3.^7")
-        end
-    end)
-
-    RegisterCommand("freezetime", function(source)
-        Time:freezeTime(nil, nil, function(active)
-            if active then
-                if source ~= 0 then
-                    TriggerClientEvent("jSync:showNotification", source, "Time sync thread is now ~r~INACTIVE~s~ and time has been frozen.")
-                else
-                    print("^7[^1TIME SYSTEM^7]^3 Time sync thread is now ^1INACTIVE^3 and time has been frozen.^7")
-                end
-            else
-                if source ~= 0 then
-                    TriggerClientEvent("jSync:showNotification", source, "Time sync thread is now ~g~ACTIVE~s~ and time has been unfrozen.") 
-                else
-                    print("^7[^1TIME SYSTEM^7]^3 Time sync thread is now ^4ACTIVE^3 and time has been unfrozen.^7")
-                end
-            end
-        end) 
-    end)
-
+if (Config.UseESX) then
+    ESX = exports["es_extended"]:getSharedObject();
 end
+
+---@param source number | boolean
+---@param message string
+local function notify(source, message)
+    if (source) then
+        TriggerClientEvent("jSync:showNotification", source, message);
+    else
+        print("^3" .. message .. "^7");
+    end
+end
+
+---@class ICommandArg
+---@field name string
+---@field help string
+
+---@class ICommandInfo
+---@field arguments ICommandArg[]
+---@field help string
+
+---@param group string
+---@param source number
+---@param cb fun(source: number, args: table, showError: fun(message: string): void): void
+---@param args string[]
+---@param showError fun(message: string): void
+local function exec_group_command(group, source, cb, args, showError)
+    if (Config.UseESX) then
+        local xPlayer = ESX.GetPlayerFromId(source);
+        if (xPlayer and xPlayer.getGroup() == group) then
+            cb(source, args, showError);
+        else
+            showError("~r~You don't have permission to execute this command.");
+        end
+    else
+        if (IsPlayerAceAllowed(source, "command")) then
+            cb(source, args, showError);
+        else
+            showError("~r~You don't have permission to execute this command.");
+        end
+    end
+end
+
+---@param source number
+---@param cb fun(source: number, args: table, showError: fun(message: string): void): void
+---@param args string[]
+---@param showError fun(message: string): void
+local function exec_command(source, cb, args, showError)
+    if (Config.UseESX) then
+        local xPlayer = ESX.GetPlayerFromId(source);
+        if (xPlayer) then
+            cb(xPlayer, args, showError);
+        else
+            showError("~r~An error occured while executing command.");
+        end
+    else
+        cb(source, args, showError);
+    end
+end
+
+---@param commandName string
+---@param cb fun(source: number, args: table, showError: fun(message: string): void): void
+---@param source number
+---@param args string[]
+---@param showError fun(message: string): void
+local function command_handler(commandName, cb, source, args, showError)
+    local success, result = pcall(cb, source, args, function(message)
+        notify(source, message);
+    end);
+    if not success then
+        if (type(showError) == "function") then
+            showError("~r~An error occured while executing command.");
+        end
+        print("^7[^1WEATHER SYSTEM^7]^1  An error occured while executing command ^7'^4" .. commandName .. "^7'^1: " .. result .. "^7");
+    end
+end
+
+---@param commandName string
+---@param group string
+---@param cb fun(source: number | boolean, args: table, showError: fun(message: string): void): void
+---@param options ICommandInfo
+local function _RegisterCommand(commandName, group, cb, options)
+    RegisterCommand(commandName, function(source, args)
+        command_handler(commandName, function(source, args, showError)
+            if (source == 0) then cb(false, args, showError); return; end
+            if (group) then exec_group_command(group, source, cb, args, showError);
+            else exec_command(source, args, showError); end
+        end, source, args)
+    end, false);
+    commands[#commands + 1] = {
+        name = ("/%s"):format(commandName),
+        help = options and options.help or "No help provided",
+        params = (options and options.arguments) or {};
+    };
+end
+
+_RegisterCommand("setweather", "superadmin", function(source, args, showError)
+    if (not args[1]) then showError("Usage: /setweather <weather>"); return; end
+    if (WeatherService.setCurrentWeather((args[1]):upper())) then
+        notify(source, "Weather is now '" .. (args[1]):upper() .. "'.");
+    else
+        notify(source, "This weather is blacklisted.");
+    end
+end, {
+    arguments = {
+        {name = 'weather', help = "Weather to set. Types: CLEAR, CLEARING, CLOUDS, EXTRASUNNY, FOGGY, OVERCAST, RAIN, SMOG, THUNDER, XMAS, SNOWLIGHT, BLIZZARD, HALLOWEEN"},
+    },
+    help = "Change current weather"
+});
+
+_RegisterCommand("freezeweather", "superadmin", function(source, args, showError)
+    WeatherService.freezeWeather(nil, function(active)
+        if (active) then
+            notify(source, "Weather sync thread is now INACTIVE and weather has been frozen.");
+        else
+            notify(source, "Weather sync thread is now ACTIVE and weather has been unfrozen.");
+        end
+    end);
+end, {
+    arguments = {},
+    help = "Freeze weather to current weather"
+});
+
+_RegisterCommand("settime", "admin", function(source, args, showError)
+    if (not args[1] or not args[2]) then showError("Usage: /settime <hour, minute>"); return; end
+    TimeService.setCurrentTime(tonumber(args[1]), tonumber(args[2]));
+    notify(source, "Time is now '" .. args[1] .. ":" .. args[2] .. "'.");
+end, {
+    arguments = {
+        {name = 'hour', help = "Hour to set (0, 23)", type = 'number'},
+        {name = 'minute', help = "minute to set (0, 59)", type = 'number'}
+    },
+    help = "Change current time"
+});
+
+_RegisterCommand("freezetime", "admin", function(source, args, showError)
+    TimeService.freezeTime(nil, nil, function(active)
+        if (active) then
+            notify(source, "Time sync thread is now INACTIVE and time has been frozen.");
+        else
+            notify(source, "Time sync thread is now ACTIVE and time has been unfrozen.");
+        end
+    end);
+end, {
+    arguments = {},
+    help = "Freeze time to current time"
+});

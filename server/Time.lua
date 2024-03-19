@@ -3,7 +3,7 @@
 --Author: JustGod
 --Made with ❤
 -------
---Last Modified: Wednesday July 27th 2022 12:51:46 am
+--Last Modified: Thuesday March 19th 2024 10:25:46 am
 -------
 --Copyright (c) 2022 JustGodWork, All Rights Reserved.
 --This file is part of JustGodWork project.
@@ -12,67 +12,72 @@
 -------
 --]]
 
----@class Time
-local _Time = {}
+local function TimeServiceConstructor()
 
-function _Time:new()
-    local self = {}
-    setmetatable(self, { __index = _Time })
-    self.currentHour = math.random(0, 23)
-    self.currentMinute = math.random(0, 59)
-    self.frozen = false
-    self.thread = Thread:new()
+    ---@class TimeService
+    local self = {};
 
-    function self:setCurrentTime(hour, minute)
+    self.currentHour = math.random(0, 23);
+    self.currentMinute = math.random(0, 59);
+    self.frozen = false;
+    self.thread = Thread:new();
+
+    ---Set current time
+    ---@param hour number
+    ---@param minute number
+    function self.setCurrentTime(hour, minute)
         if type(hour) ~= "number" or type(minute) ~= "number" then
-            return print("^7[^1TIME SYSTEM^7]^3 Invalid time format.^7")
-        end  
-        self.currentHour = (hour and math.floor(hour)) or self.currentHour
-        self.currentMinute = (minute and math.floor(minute)) or self.currentMinute
-        self:sync()
+            return print("^7[^1TIME SYSTEM^7]^3 Invalid time format.^7");
+        end
+        self.currentHour = (hour and math.floor(hour)) or self.currentHour;
+        self.currentMinute = (minute and math.floor(minute)) or self.currentMinute;
+        self.sync();
     end
 
-    ---Return current hour and current minute
-    ---@return number, number
-    function self:getCurrentTime()
-        return self.currentHour, self.currentMinute
+    ---@return number hour, number minute --current hour and current minute
+    function self.getCurrentTime()
+        return self.currentHour, self.currentMinute;
     end
 
-    function self:start()
+    function self.start()
         self.thread:loop(Config.Timers.Clock * 1000, function()
             if not self.frozen then
-                self.currentMinute = self.currentMinute + 1
-                if self.currentMinute > 59 then self.currentMinute = 0 
-                    self.currentHour = self.currentHour + 1
+                self.currentMinute = self.currentMinute + 1;
+                if self.currentMinute > 59 then self.currentMinute = 0;
+                    self.currentHour = self.currentHour + 1;
                     if self.currentHour > 23 then self.currentHour = 0 end
                 end
             end
-            self:sync()
-        end)
+            self.sync();
+        end);
     end
 
+    ---Freeze time
+    ---@param hour number
+    ---@param minutes number
     ---@param cb fun(active:boolean)
-    function self:freezeTime(hour, minutes, cb)
+    function self.freezeTime(hour, minutes, cb)
         if not self.frozen then
-            if cb then cb(true) end
-            self.frozen = true
-            self:setCurrentTime(
+            if (type(cb) == "function") then cb(true) end
+            self.frozen = true;
+            self.setCurrentTime(
                 (hour and tonumber(hour)) or self.currentHour,
                 (minutes and tonumber(minutes)) or self.currentMinute
-            )
+            );
         else
-            if cb then cb(false) end
-            self.frozen = false
+            if (type(cb) == "function") then cb(false) end
+            self.frozen = false;
         end
     end
 
-    function self:sync()
-        TriggerClientEvent("jSync:setClockTime", -1, self.currentHour, self.currentMinute)
+    function self.sync()
+        TriggerClientEvent("jSync:setClockTime", -1, self.currentHour, self.currentMinute);
     end
 
-    return self
+    self.start();
+
+    return self;
+
 end
 
-Time = _Time:new()
-
-Time:start()
+TimeService = TimeServiceConstructor();

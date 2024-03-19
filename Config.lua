@@ -3,7 +3,7 @@
 --Author: JustGod
 --Made with ❤
 -------
---Last Modified: Wednesday July 27th 2022 1:33:14 am
+--Last Modified: Thuesday March 19th 2024 10:36:28 am
 -------
 --Copyright (c) 2022 JustGodWork, All Rights Reserved.
 --This file is part of JustGodWork project.
@@ -21,5 +21,13 @@ Config.Timers.Weather = 30 -- Time in minutes between each update of the weather
 
 --FOR ESX
 Config.UseESX = false -- Use ESX commands system
+
+Config.BlacklistedWeathers = {
+	"OVERCAST",
+	"XMAS",
+	"SNOWLIGHT",
+	"BLIZZARD",
+	"HALLOWEEN",
+};
 
 --for any question or suggestion join my discord: https://discord.gg/DbuTNv9sqD

@@ -29,4 +29,4 @@ server_scripts {
 
 client_script "client/listener.lua"
 
-version "1.2.0"
+version "1.2.1" --# ESX may not work with this version

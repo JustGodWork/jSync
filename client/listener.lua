@@ -3,7 +3,7 @@
 --Author: JustGod
 --Made with ❤
 -------
---Last Modified: Wednesday July 27th 2022 1:35:54 am
+--Last Modified: Thuesday March 19th 2024 10:35:02 am
 -------
 --Copyright (c) 2022 JustGodWork, All Rights Reserved.
 --This file is part of JustGodWork project.
@@ -23,92 +23,94 @@ jSync.currentWeather = ""
 
 CreateThread(function()
 	while true do
-		Wait(0)
-		if NetworkIsPlayerActive(PlayerId()) then
-			TriggerServerEvent('jSync:onPlayerJoined')
-			break
+		Wait(0);
+		if (NetworkIsPlayerActive(PlayerId())) then
+			TriggerServerEvent('jSync:onPlayerJoined');
+			break;
 		end
 	end
-end)
+end);
 
 --LISTENERS
 RegisterNetEvent("jSync:onPlayerJoined", function(data)
-    if Config.debug then
-        print(json.encode(data))
+    if (Config.debug) then
+        print(json.encode(data));
     end
-    jSync.currentHour = data.hour
-    jSync.currentMinute = data.minute
-    jSync.currentWeather = data.weather
-end)
+    jSync.currentHour = data.hour;
+    jSync.currentMinute = data.minute;
+    jSync.currentWeather = data.weather;
+end);
 
 RegisterNetEvent("jSync:setWeather", function(weather)
-    if jSync.currentWeather ~= weather then
-        SetWeatherTypeOvertimePersist(weather, 15.0)
-        Wait(15000)
-        ClearOverrideWeather()
-        ClearWeatherTypePersist()
-        SetWeatherTypePersist(weather)
-        SetWeatherTypeNow(weather)
-        SetWeatherTypeNowPersist(weather)
-        jSync.currentWeather = weather
+    if (jSync.currentWeather ~= weather) then
+        SetWeatherTypeOvertimePersist(weather, 15.0);
+        Wait(15000);
+        ClearOverrideWeather();
+        ClearWeatherTypePersist();
+        SetWeatherTypePersist(weather);
+        SetWeatherTypeNow(weather);
+        SetWeatherTypeNowPersist(weather);
+        jSync.currentWeather = weather;
     end
-end)
+end);
 
 RegisterNetEvent("jSync:setClockTime", function(hour, minute)
     --PauseClock(true) ---todo PauseClock This native is not working properly.
     NetworkOverrideClockTime(hour, minute, 0)
-    SetClockTime(hour, minute, 0)
-    jSync.currentHour = hour
-    jSync.currentMinute = minute
-    if Config.debug then
-        print("[Time] Setting time to " .. GetClockHours() .. ":" .. GetClockMinutes())
+    SetClockTime(hour, minute, 0);
+    jSync.currentHour = hour;
+    jSync.currentMinute = minute;
+    if (Config.debug) then
+        print("[Time] Setting time to " .. GetClockHours() .. ":" .. GetClockMinutes());
     end
-end)
+end);
 
 --FUNCTIONS
 
 ---@param msg string
 function jSync.showNotification(msg)
-	BeginTextCommandThefeedPost('STRING')
-	AddTextComponentSubstringPlayerName(msg)
-	EndTextCommandThefeedPostTicker(0,1)
+	BeginTextCommandThefeedPost('STRING');
+	AddTextComponentSubstringPlayerName(msg);
+	EndTextCommandThefeedPostTicker(0,1);
 end
 
 function jSync.getCurrentWeather()
-    return jSync.currentWeather
+    return jSync.currentWeather;
 end
 
 function jSync.getCurrentHour()
-    return jSync.currentHour
+    return jSync.currentHour;
 end
 
 function jSync.getCurrentMinute()
-    return jSync.currentMinute
+    return jSync.currentMinute;
 end
 
 function jSync.getConfig()
-    return Config
+    return Config;
 end
 
 --EXPORTS THINGS
 
+---@param cb fun(obj: table)
 AddEventHandler("jSync:getSharedObject", function(cb)
-    cb(jSync)
-end)
+    cb(jSync);
+end);
 
-RegisterNetEvent("jSync:showNotification", jSync.showNotification)
+RegisterNetEvent("jSync:showNotification", jSync.showNotification);
 
 RegisterNetEvent("jSync:getCurrentWeather", function(cb)
-    cb(jSync.currentWeather)
-end)
+    cb(jSync.currentWeather);
+end);
 
+---@param cb fun(hour: number, minute: number)
 RegisterNetEvent("jSync:getCurrentTime", function(cb)
-    cb(jSync.currentHour, jSync.currentMinute)
-end)
+    cb(jSync.currentHour, jSync.currentMinute);
+end);
 
 exports('getSharedObject', function()
-	return jSync
-end)
+	return jSync;
+end);
 
 --Export usage:
 

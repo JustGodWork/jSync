@@ -15,6 +15,7 @@
 ---@class Thread
 Thread = {}
 
+---@return Thread
 function Thread:new(...)
     local self = {}
     setmetatable(self, {__index = Thread})
