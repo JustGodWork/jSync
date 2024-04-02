@@ -78,7 +78,7 @@ local function _RegisterCommand(commandName, group, cb, options)
     RegisterCommand(commandName, function(source, args)
         command_handler(commandName, function(source, args, showError)
             if (source == 0) then cb(false, args, showError); return; end
-            exec_command(source, args, showError);
+            exec_command(source, cb, args, showError);
         end, source, args)
     end, true);
     if (type(group) == "string") then
