@@ -36,28 +36,6 @@ end
 ---@field arguments ICommandArg[]
 ---@field help string
 
----@param group string
----@param source number
----@param cb fun(source: number, args: table, showError: fun(message: string): void): void
----@param args string[]
----@param showError fun(message: string): void
-local function exec_group_command(group, source, cb, args, showError)
-    if (Config.UseESX) then
-        local xPlayer = ESX.GetPlayerFromId(source);
-        if (xPlayer and xPlayer.getGroup() == group) then
-            cb(source, args, showError);
-        else
-            showError("~r~You don't have permission to execute this command.");
-        end
-    else
-        if (IsPlayerAceAllowed(source, "command")) then
-            cb(source, args, showError);
-        else
-            showError("~r~You don't have permission to execute this command.");
-        end
-    end
-end
-
 ---@param source number
 ---@param cb fun(source: number, args: table, showError: fun(message: string): void): void
 ---@param args string[]
@@ -66,7 +44,7 @@ local function exec_command(source, cb, args, showError)
     if (Config.UseESX) then
         local xPlayer = ESX.GetPlayerFromId(source);
         if (xPlayer) then
-            cb(xPlayer, args, showError);
+            cb(source, args, showError);
         else
             showError("~r~An error occured while executing command.");
         end
@@ -100,10 +78,12 @@ local function _RegisterCommand(commandName, group, cb, options)
     RegisterCommand(commandName, function(source, args)
         command_handler(commandName, function(source, args, showError)
             if (source == 0) then cb(false, args, showError); return; end
-            if (group) then exec_group_command(group, source, cb, args, showError);
             else exec_command(source, args, showError); end
         end, source, args)
-    end, false);
+    end, true);
+    if (type(group) == "string") then
+        ExecuteCommand(("add_ace group.%s command.%s allow"):format(group, commandName));
+    end
     commands[#commands + 1] = {
         name = ("/%s"):format(commandName),
         help = options and options.help or "No help provided",
@@ -111,7 +91,7 @@ local function _RegisterCommand(commandName, group, cb, options)
     };
 end
 
-_RegisterCommand("setweather", "superadmin", function(source, args, showError)
+_RegisterCommand("setweather", "admin", function(source, args, showError)
     if (not args[1]) then showError("Usage: /setweather <weather>"); return; end
     if (WeatherService.setCurrentWeather((args[1]):upper())) then
         notify(source, "Weather is now '" .. (args[1]):upper() .. "'.");
@@ -125,7 +105,7 @@ end, {
     help = "Change current weather"
 });
 
-_RegisterCommand("freezeweather", "superadmin", function(source, args, showError)
+_RegisterCommand("freezeweather", "admin", function(source, args, showError)
     WeatherService.freezeWeather(nil, function(active)
         if (active) then
             notify(source, "Weather sync thread is now INACTIVE and weather has been frozen.");
